@@ -13,12 +13,12 @@ protected: // create from serialization only
 
 // Attributes
 public:
-	bool RunProgram;
+	volatile bool RunProgram;
 	CTetrisDoc* GetDocument() const;
 	LRESULT CTetrisView::UpdateBoard(WPARAM wparam, LPARAM lparam);
 	static UINT Worker(LPVOID pParam);
 	long long int LastUpdate;
-	int Speed = 250;
+	volatile int Speed = 200;
 // Operations
 public:
 
