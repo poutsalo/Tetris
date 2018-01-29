@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(CTetrisView, CView)
 	ON_WM_KEYDOWN()
 	ON_WM_DESTROY()
 	ON_WM_CLOSE()
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CTetrisView construction/destruction
@@ -168,7 +169,7 @@ void CTetrisView::ResizeWindow() {
 }
 
 BOOL CTetrisView::OnEraseBkgnd(CDC* pDC) {
-	return 1;
+	return FALSE;
 }
 
 void CTetrisView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
