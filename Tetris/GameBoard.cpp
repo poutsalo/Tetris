@@ -51,11 +51,11 @@ void GameBoard::NewPiece(void) {
 		PiecePos[3] = { 0,Pos };
 	}
 	else if (Type == 1) {
-		if (Pos == 0) {
-			Pos++;
+		if (Pos < 1) {
+			Pos = 1;
 		}
-		if (Pos == m_nColumns - 1) {
-			Pos--;
+		if (Pos > m_nColumns - 2) {
+			Pos = m_nColumns - 2;
 		}
 		PiecePos[0] = { 1,Pos };
 		PiecePos[1] = { 1,Pos - 1 };
@@ -63,11 +63,11 @@ void GameBoard::NewPiece(void) {
 		PiecePos[3] = { 0,Pos };
 	}
 	else if (Type == 2) {
-		if (Pos == 0) {
-			Pos++;
+		if (Pos < 1) {
+			Pos = 1;
 		}
-		if (Pos == m_nColumns - 1) {
-			Pos--;
+		if (Pos > m_nColumns - 2) {
+			Pos = m_nColumns - 2;
 		}
 		PiecePos[0] = { 1,Pos };
 		PiecePos[1] = { 1,Pos + 1 };
@@ -75,11 +75,11 @@ void GameBoard::NewPiece(void) {
 		PiecePos[3] = { 0,Pos };
 	}
 	else if (Type == 3) {
-		if (Pos == 0) {
-			Pos++;
+		if (Pos < 1) {
+			Pos = 1;
 		}
-		if (Pos == m_nColumns - 1) {
-			Pos--;
+		if (Pos > m_nColumns - 2) {
+			Pos = m_nColumns - 2;
 		}
 		PiecePos[0] = { 1,Pos };
 		PiecePos[1] = { 1,Pos + 1 };
@@ -87,11 +87,11 @@ void GameBoard::NewPiece(void) {
 		PiecePos[3] = { 0,Pos - 1 };
 	}
 	else if (Type == 4) {
-		if (Pos == 0) {
-			Pos++;
+		if (Pos < 1) {
+			Pos = 1;
 		}
-		if (Pos == m_nColumns - 1) {
-			Pos--;
+		if (Pos > m_nColumns - 2) {
+			Pos = m_nColumns - 2;
 		}
 		PiecePos[0] = { 1,Pos };
 		PiecePos[1] = { 1,Pos - 1 };
@@ -99,8 +99,8 @@ void GameBoard::NewPiece(void) {
 		PiecePos[3] = { 0,Pos + 1 };
 	}
 	else if (Type == 5) {
-		if (Pos == m_nColumns - 1) {
-			Pos = Pos - 2;
+		if (Pos > m_nColumns - 3) {
+			Pos = m_nColumns - 3;
 		}
 		PiecePos[0] = { 1,Pos };
 		PiecePos[1] = { 1,Pos + 1 };
@@ -108,8 +108,8 @@ void GameBoard::NewPiece(void) {
 		PiecePos[3] = { 0,Pos };
 	}
 	else {
-		if (Pos == 0) {
-			Pos = Pos + 2;
+		if (Pos < 2) {
+			Pos = 2;
 		}
 		PiecePos[0] = { 1,Pos };
 		PiecePos[1] = { 1,Pos - 1 };
@@ -130,14 +130,7 @@ void GameBoard::PosChange(int io) {
 	if (!m_arrBoard.empty())
 	{
 		for (int i = 0; i < 4; i++) {
-			if (PiecePos[i][0] >= 0 &&
-				PiecePos[i][0] < m_arrBoard.size() &&
-				PiecePos[i][1] >= 0
-				) {
-				if (PiecePos[i][1] < m_arrBoard[PiecePos[i][0]].size()) {
-					m_arrBoard[PiecePos[i][0]][PiecePos[i][1]] = io;
-				}
-			}
+			m_arrBoard[PiecePos[i][0]][PiecePos[i][1]] = io;
 		}
 	}
 }
@@ -335,16 +328,6 @@ void GameBoard::MovePiece(int Direction = 0) {
 					NewPos[i][1] > m_nColumns - 1 ||
 					NewPos[i][0] > m_nRows - 1
 					) {
-					return;
-				}
-			}
-		}
-		for (int i = 0; i < 4; i++) {
-			if (NewPos[i][0] < 0 ||
-				NewPos[i][0] >= m_arrBoard.size() ||
-				NewPos[i][1] < 0
-				) {
-				if (NewPos[i][1] >= m_arrBoard[NewPos[i][0]].size()) {
 					return;
 				}
 			}
