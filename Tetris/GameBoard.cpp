@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "GameBoard.h"
-#include <stdlib.h>
-#include <time.h> 
 #include <string>
 
 GameBoard::GameBoard(void)
@@ -131,10 +129,16 @@ void GameBoard::PosChange(int io) {
 	}
 	if (!m_arrBoard.empty())
 	{
-		m_arrBoard[PiecePos[0][0]][PiecePos[0][1]] = io;
-		m_arrBoard[PiecePos[1][0]][PiecePos[1][1]] = io;
-		m_arrBoard[PiecePos[2][0]][PiecePos[2][1]] = io;
-		m_arrBoard[PiecePos[3][0]][PiecePos[3][1]] = io;
+		for (int i = 0; i < 4; i++) {
+			if (PiecePos[i][0] >= 0 &&
+				PiecePos[i][0] < m_arrBoard.size() &&
+				PiecePos[i][1] >= 0
+				) {
+				if (PiecePos[i][1] < m_arrBoard[PiecePos[i][0]].size()) {
+					m_arrBoard[PiecePos[i][0]][PiecePos[i][1]] = io;
+				}
+			}
+		}
 	}
 }
 
@@ -150,50 +154,36 @@ void GameBoard::MovePiece(int Direction = 0) {
 		std::vector<std::vector<int>> NewPos = PiecePos;
 		if (Direction == 0) {
 			//ALAS
-			if (PiecePos[0][0] > m_nRows - 2 ||
-				PiecePos[1][0] > m_nRows - 2 ||
-				PiecePos[2][0] > m_nRows - 2 || 
-				PiecePos[3][0] > m_nRows - 2) {
-				PosChange(1);
-				CheckBoard();
-				NewPiece();
-				return;
+			for (int i = 0; i < 4; i++) {
+				if (PiecePos[i][0] > m_nRows - 2) {
+					PosChange(1);
+					CheckBoard();
+					NewPiece();
+					return;
+				}
 			}
-			else {
-				NewPos[0][0] = PiecePos[0][0] + 1;
-				NewPos[1][0] = PiecePos[1][0] + 1;
-				NewPos[2][0] = PiecePos[2][0] + 1;
-				NewPos[3][0] = PiecePos[3][0] + 1;
+			for (int i = 0; i < 4; i++) {
+				NewPos[i][0] = PiecePos[i][0] + 1;
 			}
 		}
 		else if (Direction == 1) {
 			//VASEMMALLE
-			if (PiecePos[0][1] <= 0 ||
-				PiecePos[1][1] <= 0 ||
-				PiecePos[2][1] <= 0 || 
-				PiecePos[3][1] <= 0) {
-				return;
+			for (int i = 0; i < 4; i++) {
+				if (PiecePos[i][1] <= 0)
+					return;
 			}
-			else {
-				NewPos[0][1] = PiecePos[0][1] - 1;
-				NewPos[1][1] = PiecePos[1][1] - 1;
-				NewPos[2][1] = PiecePos[2][1] - 1;
-				NewPos[3][1] = PiecePos[3][1] - 1;
+			for (int i = 0; i < 4; i++) {
+				NewPos[i][1] = PiecePos[i][1] - 1;
 			}
 		}
 		else if (Direction == 2) {
 			//OIKEALLE
-			if (PiecePos[0][1] > m_nColumns - 2 ||
-				PiecePos[1][1] > m_nColumns - 2 ||
-				PiecePos[2][1] > m_nColumns - 2 ||
-				PiecePos[3][1] > m_nColumns - 2) {
-				return;
+			for (int i = 0; i < 4; i++) {
+				if (PiecePos[i][1] > m_nColumns - 2)
+					return;
 			}
-			else {
-				NewPos[0][1] = PiecePos[0][1] + 1;
-				NewPos[1][1] = PiecePos[1][1] + 1;
-				NewPos[2][1] = PiecePos[2][1] + 1;
-				NewPos[3][1] = PiecePos[3][1] + 1;
+			for (int i = 0; i < 4; i++) {
+				NewPos[i][1] = PiecePos[i][1] + 1;
 			}
 		}
 		else {
@@ -339,19 +329,24 @@ void GameBoard::MovePiece(int Direction = 0) {
 			else {
 				NewPos[4][1] = PiecePos[4][1] + 1;
 			}
-			if (NewPos[0][1] < 0 ||
-				NewPos[1][1] < 0 ||
-				NewPos[2][1] < 0 ||
-				NewPos[3][1] < 0 || 
-				NewPos[0][1] > m_nColumns - 1 ||
-				NewPos[1][1] > m_nColumns - 1 ||
-				NewPos[2][1] > m_nColumns - 1 ||
-				NewPos[3][1] > m_nColumns - 1 ||
-				NewPos[0][0] > m_nRows - 2 ||
-				NewPos[1][0] > m_nRows - 2 ||
-				NewPos[2][0] > m_nRows - 2 ||
-				NewPos[3][0] > m_nRows - 2) {
-				return;
+			for (int i = 0; i < 4; i++) {
+				if (NewPos[i][0] < 0 ||
+					NewPos[i][1] < 0 ||
+					NewPos[i][1] > m_nColumns - 1 ||
+					NewPos[i][0] > m_nRows - 1
+					) {
+					return;
+				}
+			}
+		}
+		for (int i = 0; i < 4; i++) {
+			if (NewPos[i][0] < 0 ||
+				NewPos[i][0] >= m_arrBoard.size() ||
+				NewPos[i][1] < 0
+				) {
+				if (NewPos[i][1] >= m_arrBoard[NewPos[i][0]].size()) {
+					return;
+				}
 			}
 		}
 		if (m_arrBoard[NewPos[0][0]][NewPos[0][1]] == 1 ||
